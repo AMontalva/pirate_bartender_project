@@ -39,7 +39,12 @@ def construct_drink():
             drink.append(random.choice(ingredients[r_key]))
     print(drink)
     
-construct_drink()
+# construct_drink()
 
-# if __name__ == '__main__':
-#     drink_questions()
+if __name__ == '__main__':
+    condition = True
+    while(condition):
+        construct_drink()
+        another_reply = input("Would you like another drink? (y/n) ")
+        if(another_reply == "n" or another_reply == "no"):
+            condition = False
