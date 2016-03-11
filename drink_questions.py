@@ -16,65 +16,69 @@ ingredients = {
     "fruity": ["slice of orange", "dash of cassis", "cherry on top"],
 }
 
-ingredients_stock = {
-    "glug of rum": 10, "slug of whisky": 5, "splash of gin": 10, 
-    "olive on a stick": 10, "salt-dusted rim": 5, "rasher of bacon": 10, 
-    "shake of bitters": 10, "splash of tonic": 5, "twist of lemon peel": 10, 
-    "sugar cube": 10, "spoonful of honey": 5, "spash of cola": 10, 
-    "slice of orange": 10, "dash of cassis": 5, "cherry on top": 10
+inventory = {
+    "glug of rum": 3, "slug of whisky": 3, "splash of gin": 3, 
+    "olive on a stick": 3, "salt-dusted rim": 3, "rasher of bacon": 3, 
+    "shake of bitters": 3, "splash of tonic": 3, "twist of lemon peel": 3, 
+    "sugar cube": 3, "spoonful of honey": 3, "spash of cola": 3, 
+    "slice of orange": 3, "dash of cassis": 3, "cherry on top": 3
 }
 
-response_dict = {}
+preferences = {}
 
 regular_customers = {}
 
-def take_stock(ingredient_list):
-    for ingredient in ingredient_list:
-        if(ingredient in ingredients_stock):
-            ingredients_stock[ingredient] = ingredients_stock[ingredient] - 1
-    print(ingredients_stock)
+def check_inventory(drink_ingredients):
+    """subtract inventory from ingredients used to contruct drink
+    add to inventory when ingredients get too low"""
+    for ingredient in drink_ingredients:
+        if(ingredient in inventory):
+            inventory[ingredient] = inventory[ingredient] - 1
+            if(inventory[ingredient] < 0):
+                print("Time to restock {0}!".format(ingredient))
+                inventory[ingredient] = 10
+    print("Inventory: {0}".format(inventory))
 
 def get_customer_name():
+    """get customer name
+    run program depending on regular customers choices"""
     customer_name = input("What is your name? ")
     if(customer_name in regular_customers):
         the_usual = input("The ususal?(y/n) ")
         if(the_usual == 'y'):
-            print(regular_customers[customer_name])
-            take_stock(regular_customers[customer_name])
+            print("{0}'s usual drink: {1}".format(customer_name, regular_customers[customer_name]))
+            check_inventory(regular_customers[customer_name])
         else:
             drink_questions()
-            construct_drink(response_dict, customer_name)
+            construct_drink(preferences, customer_name)
     else:
         regular_customers[customer_name] = ""
         drink_questions()
-        construct_drink(response_dict, customer_name)
-
+        construct_drink(preferences, customer_name)
 
 def drink_questions():
+    """ get the drink preferences of a customer with 5 questions"""
     for q_key in questions:
         response = input(questions[q_key] + " ")
         if(response == "y" or response == "yes"):
-            response_dict[q_key] = True
+            preferences[q_key] = True
         else:
-            response_dict[q_key] = False
-    return response_dict
+            preferences[q_key] = False
+    print("Drink preferences {0}".format(preferences))
+    return preferences
 
-# drink_questions()
-
-
-def construct_drink(response_dict, customer_name):
+def construct_drink(preferences, customer_name):
+    """construct drink based on preferences and regular customer name
+    take stock of drink ingredient created
+    update the regular customer drink"""
     drink = []
-    print(response_dict)
-    for r_key in response_dict:
-        print(response_dict[r_key])
-        if(response_dict[r_key] == True and r_key in ingredients):
+    for r_key in preferences:
+        if(preferences[r_key] == True and r_key in ingredients):
             drink.append(random.choice(ingredients[r_key]))
-    take_stock(drink)
-    print(drink)
+    check_inventory(drink)
+    print("Drink contructed: {0}".format(drink))
     regular_customers[customer_name] = drink
     
-# construct_drink(response_dict)
-
 
 if __name__ == '__main__':
     condition = True
