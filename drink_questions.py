@@ -24,6 +24,9 @@ inventory = {
     "slice of orange": 3, "dash of cassis": 3, "cherry on top": 3
 }
 
+drink_names_1 = ['red', 'blue', 'yellow', 'green', 'purple', 'orange']
+drink_names_2 = ['cat', 'dog', 'bird', 'lion', 'bear', 'hippo']
+
 preferences = {}
 
 regular_customers = {}
@@ -77,7 +80,13 @@ def construct_drink(preferences, customer_name):
             drink.append(random.choice(ingredients[r_key]))
     check_inventory(drink)
     print("Drink contructed: {0}".format(drink))
-    regular_customers[customer_name] = drink
+    
+    random_drink_name_1 = random.choice(drink_names_1)
+    random_drink_name_2 = random.choice(drink_names_2)
+    drink_name = random_drink_name_1 + " " + random_drink_name_2
+    print("Drink name: {0} ".format(drink_name))
+
+    regular_customers[customer_name] = drink_name
     
 
 if __name__ == '__main__':
